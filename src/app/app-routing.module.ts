@@ -12,7 +12,7 @@ const routes: Routes = [
     path: 'reactivo', component: ReactiveComponent
   },
   {
-    path: '**', pathMatch: 'full', redirectTo: 'template'
+    path: '**', pathMatch: 'full', redirectTo: 'reactivo'
   }
 ];
 
