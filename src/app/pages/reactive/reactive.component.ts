@@ -16,6 +16,7 @@ export class ReactiveComponent implements OnInit {
 
     this.crearFormulario();
     this.cargarDataAlFormulario();
+    this.crearListeners();
 
   }
 
@@ -36,6 +37,10 @@ export class ReactiveComponent implements OnInit {
 
   get correoNoValido(){
     return this.forma.get('correo').invalid && this.forma.get('correo').touched
+  }
+
+  get usuarioNoValido(){
+    return this.forma.get('usuario').invalid && this.forma.get('usuario').touched
   }
 
   get distritoNoValido(){
@@ -63,6 +68,7 @@ export class ReactiveComponent implements OnInit {
       nombre: ['', [Validators.required, Validators.minLength(5)] ],
       apellido: ['', [Validators.required, this.validadores.noHerrera]],
       correo: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')] ],
+      usuario: ['', , this.validadores.existeUsuario],
       pass1: ['', Validators.required], 
       pass2: ['', Validators.required],
       direccion: this.fb.group({
@@ -75,12 +81,30 @@ export class ReactiveComponent implements OnInit {
     });
   }
 
+  //Para saber cuando la forma cambie en algun campo
+  crearListeners(){
+
+    //Detecta el cambio en el formulario 
+    this.forma.valueChanges.subscribe( valor => {
+      console.log( valor );
+    } );
+
+    //Detecta el cambio en el estatus
+    this.forma.statusChanges.subscribe( status => console.log({ status }));
+
+    //Detectar cambio en un campo expecifico 
+    this.forma.get('nombre').valueChanges.subscribe( valor => console.log(valor) );
+
+  }
+
   cargarDataAlFormulario(){
     //this.forma.setValue({
     this.forma.reset({
       nombre: "Fernando",
       apellido: "Perez",
       correo: "juan@gmail.com",
+      pass1: "123",
+      pass2: "123",
       direccion: {
         distrito: "Ontario",
         ciudad: "Ottawa"
